@@ -3,6 +3,12 @@
 {% block app_content %}
     <h1>Hi, {{ current_user.username }}!</h1>
     {% for post in posts %}
-    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
+        <div><p>
+            {{ post.author.username }} says: <b>{{ post.body }}</b>
+        </p></div>
     {% endfor %}
+    <br>
+    {% if admin_role %}
+        <a href="{{ url_for('admin') }}">Administrator Functions</a>
+    {% endif %}
 {% endblock %}

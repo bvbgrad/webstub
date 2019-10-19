@@ -12,7 +12,6 @@ from app.models import User
 @login_required
 def index():
     app.logger.info('index')
-    user = {'username': 'Brent'}
     posts = [
         {
             'author': {'username': 'John'},
@@ -23,7 +22,20 @@ def index():
             'body': 'The Avengers movie was so cool!'
         }
     ]
-    return render_template('index.html', title='Home', user=user, posts=posts)
+
+    admin_role = False
+    if current_user.username == "bvb":
+        app.logger.info('User is administrator')
+        admin_role = True
+    return render_template('index.html', admin_role=admin_role,  posts=posts)
+
+
+@app.route('/admin')
+@login_required
+def admin():
+    app.logger.info('admin page')
+    registered_users = User.query.all()
+    return render_template('admin.html', users=registered_users)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -34,14 +46,6 @@ def login():
         return redirect(url_for('index'))
     app.logger.info('login not logged in')
     form = LoginForm()
-    # if form.validate_on_submit():
-    #     user = User.query.filter_by(username=form.username.data).first()
-    #     if user is None or not user.check_password(form.password.data):
-    #         app.logger.info('login invalid user')
-    #         flash('Invalid username or password')
-    #         return redirect(url_for('login'))
-    #     app.logger.info('login redirect index')
-    #     return redirect(url_for('index'))
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
