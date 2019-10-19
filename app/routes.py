@@ -11,7 +11,8 @@ from app.models import User
 @app.route('/index')
 @login_required
 def index():
-    user = {'username': 'Miguel'}
+    app.logger.info('index')
+    user = {'username': 'Brent'}
     posts = [
         {
             'author': {'username': 'John'},
@@ -27,9 +28,20 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    app.logger.info('login')
     if current_user.is_authenticated:
+        app.logger.info('login valid user')
         return redirect(url_for('index'))
+    app.logger.info('login not logged in')
     form = LoginForm()
+    # if form.validate_on_submit():
+    #     user = User.query.filter_by(username=form.username.data).first()
+    #     if user is None or not user.check_password(form.password.data):
+    #         app.logger.info('login invalid user')
+    #         flash('Invalid username or password')
+    #         return redirect(url_for('login'))
+    #     app.logger.info('login redirect index')
+    #     return redirect(url_for('index'))
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
@@ -45,12 +57,14 @@ def login():
 
 @app.route('/logout')
 def logout():
+    app.logger.info('logout')
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    app.logger.info('Register')
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = RegistrationForm()
