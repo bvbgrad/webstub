@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block navbar %}
-    <nav class="navbar navbar-default">
+<nav class="navbar navbar-default" xmlns="http://www.w3.org/1999/html">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -14,7 +14,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ url_for('index') }}">Disk Creator</a>
+                <a class="navbar-brand" href="{{ url_for('index') }}">Disk Catalog</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
@@ -45,4 +45,17 @@
         {# application content needs to be provided in the app_content block #}
         {% block app_content %}{% endblock %}
     </div>
+
+    <div class="panel panel-footer">
+        <div class="footer-copyright text-center">
+            &copy; <script>document.write( new Date().getFullYear() );</script> Copyright:
+            <a href="#"> 6L, LLC</a>
+            <p><script>document.write( new Date() );</script></p>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{super()}}
 {% endblock %}
