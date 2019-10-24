@@ -10,11 +10,17 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
+    admin_type = db.Column(db.String(20), default="none")
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return '<Username {}, email: {}, Admin type: {}>'.format(self.username, self.email, self.admin_type)
+
+    def __init__(self, username, email, admin_type):
+        self.username = username
+        self.email = email
+        self.admin_type = admin_type
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

@@ -8,7 +8,7 @@
         </p></div>
     {% endfor %}
     <br>
-    {% if admin_role %}
+    {% if admin_type == "admin" %}
         <a href="{{ url_for('admin') }}">Administrator Functions</a>
     {% endif %}
 {% endblock %}

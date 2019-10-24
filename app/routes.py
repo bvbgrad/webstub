@@ -23,16 +23,14 @@ def index():
         }
     ]
 
-    admin_role = False
-    if current_user.username == "bvb":
-        app.logger.info('User is administrator')
-        admin_role = True
-    return render_template('index.html', admin_role=admin_role,  posts=posts)
+    return render_template('index.html', admin_type=current_user.admin_type,  posts=posts)
 
 
 @app.route('/admin')
 @login_required
 def admin():
+    if current_user.admin_type != "admin":
+        return redirect(url_for('index'))
     app.logger.info('admin page')
     registered_users = User.query.all()
     return render_template('admin.html', users=registered_users)
@@ -73,8 +71,7 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        # todo unexpected argument
-        user = User(username=form.username.data, email=form.email.data)
+        user = User(username=form.username.data, email=form.email.data, admin_type=form.admin_type.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()

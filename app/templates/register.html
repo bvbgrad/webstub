@@ -19,6 +19,13 @@
             {% endfor %}
         </p>
         <p>
+            {{ form.admin_type.label }}<br>
+            {{ form.admin_type(size=20) }}<br>
+            {% for error in form.email.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
             {{ form.password.label }}<br>
             {{ form.password(size=32) }}<br>
             {% for error in form.password.errors %}

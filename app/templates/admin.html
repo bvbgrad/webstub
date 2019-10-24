@@ -5,7 +5,8 @@
     {% for user in users %}
         <div><p>
             Username: {{ user.username }} <br>
-               email: {{ user.email }}
+               email: {{ user.email }} <br>
+            Admin type: {{ user.admin_type }}
         </p></div>
     {% endfor %}
 {% endblock %}
