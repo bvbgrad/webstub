@@ -72,6 +72,8 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data, admin_type=form.admin_type.data)
+        if not user.admin_type:
+            user.admin_type = "none"
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -89,5 +91,25 @@ def edit_profile():
     user_line = int(line) - 1
     users = User.query.all()
     user = users[user_line]
+
+    form = RegistrationForm()
+    # form.username = user.username
+    if form.validate_on_submit():
+        if user.username != form.username.data:
+            user.username = form.username.data
+        if user.email != form.email.data:
+            user.email = form.email.data
+        if user.admin_type != form.admin_type.data:
+            if form.admin_type.data is None:
+                user.admin_type = "none"
+            else:
+                user.admin_type = form.admin_type.data
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('User profile has been updated')
+        return redirect(url_for('admin'))
+
     app.logger.info('Edit User {} {}'.format(user_line, user))
-    return render_template('edit_profile.html', user=user)
+    form_title = "Edit < {} >".format(user.username)
+    return render_template('register.html', title=form_title, user=user, form=form, update=True)
