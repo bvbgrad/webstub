@@ -78,3 +78,16 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    if current_user.admin_type != "admin":
+        return redirect(url_for('index'))
+    line = request.args.get("line")
+    user_line = int(line) - 1
+    users = User.query.all()
+    user = users[user_line]
+    app.logger.info('Edit User {} {}'.format(user_line, user))
+    return render_template('edit_profile.html', user=user)
