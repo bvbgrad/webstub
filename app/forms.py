@@ -16,7 +16,6 @@ class LoginForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    # admin_type = SelectField('Account Type', default='none',
     admin_type = RadioField('Account Type', default='none',
             choices=[('none', 'User'), ('admin', 'Administrator')])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -34,3 +33,18 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Please use a different email address.')
 
+
+class EditProfileForm(FlaskForm):
+    username = StringField('Username')
+    email = StringField('Email', validators=[Email()])
+    admin_type = RadioField('Account Type', default='none',
+            choices=[('none', 'User'), ('admin', 'Administrator')])
+    password = PasswordField('Password')
+    password2 = PasswordField(
+        'Repeat Password', validators=[EqualTo('password')])
+    submit = SubmitField('Submit')
+
+
+class DeleteAccountForm(FlaskForm):
+    response = RadioField(default='no', choices=[('yes', 'Yes'), ('no', 'No')])
+    submit = SubmitField('Confirm')
