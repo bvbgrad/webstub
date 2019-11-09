@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, current_app
 from flask_login import current_user, login_required
 
 from app.main import bp
@@ -8,7 +8,7 @@ from app.main import bp
 @bp.route('/index')
 @login_required
 def index():
-    # app.logger.info('index')
+    current_app.logger.info('index')
     posts = [
         {
             'author': {'username': 'John'},

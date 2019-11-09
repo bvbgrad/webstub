@@ -1,8 +1,8 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import current_app, render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.urls import url_parse
 
-from app import app, db
+from app import db
 from app.auth import bp
 from app.auth.forms import LoginForm, RegistrationForm, EditRegistrationForm, DeleteAccountForm
 from app.models import User
@@ -13,18 +13,18 @@ from app.models import User
 def admin():
     if current_user.admin_type != "admin":
         return redirect(url_for('main.index'))
-    app.logger.info('admin page')
+    current_app.logger.info('admin page')
     registered_users = User.query.all()
     return render_template('auth/admin.html', users=registered_users)
 
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    app.logger.info('login')
+    current_app.logger.info('login')
     if current_user.is_authenticated:
-        app.logger.info('login valid user')
+        current_app.logger.info('login valid user')
         return redirect(url_for('main.index'))
-    app.logger.info('login not logged in')
+    current_app.logger.info('login not logged in')
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -41,14 +41,14 @@ def login():
 
 @bp.route('/logout')
 def logout():
-    app.logger.info('logout')
+    current_app.logger.info('logout')
     logout_user()
     return redirect(url_for('auth.login'))
 
 
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
-    app.logger.info('Register')
+    current_app.logger.info('Register')
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     form = RegistrationForm()
@@ -87,12 +87,12 @@ def edit_registration():
             user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        app.logger.info('Updated User {} to {}'.format(user_id, user))
+        current_app.logger.info('Updated User {} to {}'.format(user_id, user))
 
         flash('User profile has been updated')
         return redirect(url_for('auth.admin'))
 
-    app.logger.info('Edit User {} {}'.format(user_id, user))
+    current_app.logger.info('Edit User {} {}'.format(user_id, user))
     form_title = "Edit < {} >".format(user.username)
     return render_template('auth/edit_registration.html', title=form_title, user=user, form=form)
 
@@ -113,7 +113,7 @@ def delete_account():
             db.session.delete(user)
             db.session.commit()
             flash('Account <{}> has been deleted!'.format(user.username))
-            app.logger.info('User Account {} {} deleted'.format(user_id, user))
+            current_app.logger.info('User Account {} {} deleted'.format(user_id, user))
         else:
             flash('Delete action canceled')
         return redirect(url_for('auth.admin'))
