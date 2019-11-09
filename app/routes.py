@@ -118,6 +118,8 @@ def edit_profile():
 @app.route('/delete_account', methods=['GET', 'POST'])
 @login_required
 def delete_account():
+    # todo created new account, first time delete -> selected wrong line (not repeatable)
+    # todo prevent deletion of current user account?
     if current_user.admin_type != "admin":
         return redirect(url_for('index'))
     user_id = request.args.get("line")

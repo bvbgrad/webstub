@@ -19,6 +19,10 @@ login.login_view = 'login'
 
 bootstrap = Bootstrap(app)
 
+from app.errors import bp as errors_bp
+app.register_blueprint(errors_bp)
+
+
 if not app.debug:
     if not os.path.exists('logs'):
         os.mkdir('logs')
@@ -33,4 +37,4 @@ if not app.debug:
     app.logger.setLevel(logging.INFO)
     app.logger.info('DiskCatalog startup')
 
-from app import routes, models, errors
+from app import routes, models
