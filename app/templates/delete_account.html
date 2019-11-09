@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <h1>Delete Account < {{ user.username }} >?</h1>
+
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.response.label }}
+            {{ form.response(size=2) }}
+        </p>
+        <p>
+            {{ form.submit() }}
+            <a href="{{ url_for('admin') }}">Back</a>
+        </p>
+    </form>
+{% endblock %}

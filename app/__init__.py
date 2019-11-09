@@ -24,6 +24,7 @@ if not app.debug:
         os.mkdir('logs')
     file_handler = RotatingFileHandler('logs/diskCatalog.log', maxBytes=10240,
                                        backupCount=10)
+    # todo rotating log file backup creates fragmented log files
     file_handler.setFormatter(logging.Formatter(
         '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
     file_handler.setLevel(logging.INFO)
