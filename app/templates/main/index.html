@@ -9,6 +9,6 @@
     {% endfor %}
     <br>
     {% if admin_type == "admin" %}
-        <a href="{{ url_for('admin') }}">Administrator Functions</a>
+        <a href="{{ url_for('auth.admin') }}">Administrator Functions</a>
     {% endif %}
 {% endblock %}

@@ -44,7 +44,7 @@
         <p>
             {{ form.submit() }}
             {% if current_user.admin_type == "admin" %}
-                <a href="{{ url_for('admin') }}">Back</a>
+                <a href="{{ url_for('auth.admin') }}">Back</a>
             {% endif %}
         </p>
     </form>

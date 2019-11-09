@@ -34,7 +34,7 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Email address already being used.')
 
 
-class EditProfileForm(FlaskForm):
+class EditRegistrationForm(FlaskForm):
     username = StringField('Username')
     email = StringField('Email', validators=[Email()])
     admin_type = RadioField('Account Type', default='none',
