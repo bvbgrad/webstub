@@ -13,6 +13,7 @@ class User(UserMixin, db.Model):
     admin_type = db.Column(db.String(20), default="none")
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
         return '<Username {}, email: {}, Admin type: {}>'.format(self.username, self.email, self.admin_type)
