@@ -91,6 +91,11 @@ def edit_registration():
 
         flash('User profile has been updated')
         return redirect(url_for('auth.admin'))
+    elif request.method == 'GET':
+        form.username.data = user.username
+        form.email.data = user.email
+        # todo figure out how to 
+        # form.admin_type = user.admin_type
 
     current_app.logger.info('Edit User {} {}'.format(user_id, user))
     form_title = "Edit < {} >".format(user.username)
