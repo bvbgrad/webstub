@@ -3,9 +3,7 @@
 {% block app_content %}
     <h1>Hi, {{ current_user.username }}!</h1>
     {% for post in posts %}
-        <div><p>
-            {{ post.author.username }} says: <b>{{ post.body }}</b>
-        </p></div>
+        {% include '_post.html' %}
     {% endfor %}
     <br>
     {% if admin_type == "admin" %}
