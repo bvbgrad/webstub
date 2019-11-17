@@ -74,6 +74,7 @@ def edit_registration():
 
     form = EditRegistrationForm()
     if form.validate_on_submit():
+        # todo need to prevent selection of an existing username, ugly constraint error
         if user.username != form.username.data:
             user.username = form.username.data
         if user.email != form.email.data:
@@ -94,7 +95,8 @@ def edit_registration():
     elif request.method == 'GET':
         form.username.data = user.username
         form.email.data = user.email
-        # todo figure out how to prefill admin_type radio button
+        # todo figure out how to pre-fill admin_type radio button
+        # ??? setattr(form, attr, attr_value) ???
         # form.admin_type = user.admin_type
 
     current_app.logger.info('Edit User {} {}'.format(user_id, user))
