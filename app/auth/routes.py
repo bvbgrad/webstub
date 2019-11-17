@@ -67,10 +67,10 @@ def register():
 @bp.route('/edit_registration', methods=['GET', 'POST'])
 @login_required
 def edit_registration():
-    if current_user.admin_type != "admin":
-        return redirect(url_for('main.index'))
     user_id = request.args.get("line")
+    current_app.logger.info('edit registration information for user_id {}'.format(user_id))
     user = User.query.filter_by(id=user_id).first_or_404()
+    current_app.logger.info('edit registration for {}'.format(user))
 
     form = EditRegistrationForm()
     if form.validate_on_submit():
@@ -94,7 +94,7 @@ def edit_registration():
     elif request.method == 'GET':
         form.username.data = user.username
         form.email.data = user.email
-        # todo figure out how to 
+        # todo figure out how to prefill admin_type radio button
         # form.admin_type = user.admin_type
 
     current_app.logger.info('Edit User {} {}'.format(user_id, user))
