@@ -1,36 +1,26 @@
-FROM python:3.6-alpine
+FROM httpd:2.4.41
+RUN apt-get update && apt-get install -y \
+    libapache2-mod-wsgi  \
+    python-pip \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN pip install Flask
 
-# make sure the package repository is up to date
-RUN apk update \
- && apk upgrade \
- && apk add bash \
- && rm -rf /var/cache/*/* \
- && echo "" > /root/.ash_history
+RUN a2dissite default
+RUN a2dissite default-ssl
+RUN a2enmod wsgi
 
-# change default shell from ash to bash
-RUN sed -i -e "s/bin\/ash/bin\/bash/" /etc/passwd
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
 
-ENV LC_ALL=en_US.UTF-8
+COPY src /var/www/src
 
-RUN adduser -D bvb
+#Creamos el virtual host
+COPY resources/docker/app /etc/apache2/sites-available/appflask
+RUN chown -R www-data:www-data /var/www/src
+RUN chown www-data:www-data /etc/apache2/sites-available/appflask
+RUN a2ensite appflask
 
-WORKDIR /home/bvb
-
-COPY requirements.txt requirements.txt
-RUN python -m venv venv
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
-RUN pip install gunicorn
-
-COPY app app
-COPY migrations migrations
-COPY bvb02.py config.py boot.sh ./
-RUN chmod +x boot.sh
-
-ENV FLASK_APP bvb02.py
-
-#RUN chown -R dev01:dev01 ./
-USER bvb
-
-EXPOSE 5000
-ENTRYPOINT ["./boot.sh"]
+EXPOSE 80
+CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]
+COPY ./html/ /usr/local/apache2/htdocs/
