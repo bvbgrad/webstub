@@ -5,6 +5,7 @@ RUN adduser -D bvb02
 WORKDIR home/bvb02
 COPY requirements.txt .
 RUN pip install -r requirements.txt
+RUN pip install gunicorn
 
 COPY app app
 COPY migrations migrations
