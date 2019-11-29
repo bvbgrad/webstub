@@ -21,6 +21,7 @@ def admin():
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     current_app.logger.info('login')
+
     if current_user.is_authenticated:
         current_app.logger.info('login valid user')
         return redirect(url_for('main.index'))
@@ -49,6 +50,16 @@ def logout():
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     current_app.logger.info('Register')
+    # Create a default admin user if User table is empty
+    registered_users = len(User.query.all())
+    current_app.logger.info('There are {} registered users'.format(registered_users))
+    if registered_users == 0:
+        admin_user = User("admin", "admin@e.com", "admin")
+        admin_user.set_password("admin")
+        db.session.add(admin_user)
+        db.session.commit()
+        current_app.logger.info('Default admin user created')
+
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     form = RegistrationForm()

@@ -46,6 +46,7 @@ def create_app(config_class=Config):
         file_handler.setLevel(logging.INFO)
         app.logger.addHandler(file_handler)
 
+        # todo make logging level a configuration parameter
         app.logger.setLevel(logging.INFO)
         app.logger.info('StubApp startup')
     return app
